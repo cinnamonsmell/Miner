@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--white);
+}
+
+:root {
+    --purple: #1d2039;
+    --light-purple: #242947;
+    --lighter-purple: #797e9a;
+    --green: #66a663;
+    --white: #fff;
+    --orange: #dbac36;
+}
+
+body {
+    background-color: var(--purple);
+    margin: 20px;
+}
+
+#logo {
+    width: 80px;
+    height: 80px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    background-color: var(--light-purple);
+}
+
+.main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    gap: 20px;
+}
+
+.gameArea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--light-purple);
+    padding: 20px;
+    border-radius: 20px;
+    flex-grow: 1000;
+}
+
+.gameField {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat (8, 1fr);
+    gap: 6px;
+}
+
+.field {
+    background-color: var(--purple);
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.field.active {
+    background-color: var(--lighter-purple);
+}
+
+.field.flag {
+    background-image: url(./img/flag-in-hole.png);
+    background-size: contain;
+    background-position: center;
+    background-color: var(--green);
+}
+
+.gameSetting {
+    background-color: var(--light-purple);
+    border-radius: 20px;
+    padding: 40px 20px;
+    flex-grow: 1;
+}
+
+h2 {
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.scoup {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 30px;
+    margin-bottom: 30px;
+}
+
+.point {
+    font-size: 21px;
+    padding: 8px 0;
+    background-color: var(--purple);
+    border-radius: 50px;
+    flex-basis: 180px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.point.active {
+    background-color: var(--orange);
+}
+
+#gameBtn {
+
+    background-color: var(--green);
+    color: var(--white);
+    text-align: center;
+    padding: 12px;
+    border-radius: 50px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
