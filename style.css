@@ -64,6 +64,10 @@ header {
     width: 30px;
     height: 30px;
     border-radius: 4px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+
 }
 
 .field.active {
@@ -121,5 +125,34 @@ h2 {
     border-radius: 50px;
     font-size: 24px;
     cursor: pointer;
+}
+
+#loginWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(159,159,184,0.26934523809523814) 35%, rgba(0,212,255,1) 100%);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#loginWrapper h3 {
+    font-size: 26px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+#loginWrapper input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    background-color: var(--purple);
+    font-size: 22px;
 }
 

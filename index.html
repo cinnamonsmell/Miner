@@ -1,117 +1,42 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Miner</title>
 
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="loginWrapper">
+      <form>
+        <h3>Введите свой логин:</h3>
+        <input type="text" id="login" />
+      </form>
+    </div>
     <header>
-        <img src="./img/bomb.png" alt="" id="logo">
-        <h1>САПЁР</h1>
-        <span>[Амина кол-во баллов: 50000]</span>
+      <img src="./img/bomb.png" alt="" id="logo" />
+      <h1>САПЁР</h1>
+      <span>[Амина кол-во баллов: 50000]</span>
     </header>
     <div class="main">
-        <div class="gameArea">
-            <div class="gameField">
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-                <div class="field"></div>
-            </div>
+      <div class="gameArea">
+        <div class="gameField"></div>
+      </div>
+      <div class="gameSetting">
+        <h2>количество баллов</h2>
+        <div class="scoup">
+          <div class="point active">1000</div>
+          <div class="point">2000</div>
+          <div class="point">3000</div>
+          <div class="point">5000</div>
+          <div class="point">10000</div>
+          <div class="point">Другое</div>
         </div>
-        <div class="gameSetting">
-            <h2>количество баллов</h2>
-            <div class="scoup">
-                <div class="point active">1000</div>
-                <div class="point">2000</div>
-                <div class="point">3000</div>
-                <div class="point">5000</div>
-                <div class="point">10000</div>
-                <div class="point">Другое</div>
-            </div>
-            <div id="gameBtn">Играть</div>
-        </div>
+        <div id="gameBtn">ИГРАТЬ</div>
+      </div>
     </div>
 
     <script src="./script.js"></script>
-</body>
+  </body>
 </html>
