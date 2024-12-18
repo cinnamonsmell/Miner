@@ -81,6 +81,13 @@ header {
     background-color: var(--green);
 }
 
+.field.bomb {
+    background-color: orange;
+    background-image: url(./img/bomb.png);
+    background-position: center;
+    background-size: contain;
+}
+
 .gameSetting {
     background-color: var(--light-purple);
     border-radius: 20px;

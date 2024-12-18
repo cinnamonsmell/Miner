@@ -1,10 +1,10 @@
-//Кнопки
+// Кнопки
 const gameBtn = document.getElementById("gameBtn");
 let point = 1000;
 let USERNAME;
 let game_id;
 
-//Слушатели событий
+// Слушатели событий
 gameBtn.addEventListener("click", startOrStopGame);
 document
   .querySelector("#loginWrapper form")
@@ -21,20 +21,21 @@ function addPoint(event) {
   let target = event.target;
   point = +target.innerHTML;
   const activeBtn = document.querySelector(".point.active");
-  activeBtn.classList.remove("active");
+  if (activeBtn) {
+    activeBtn.classList.remove("active");
+  }
   console.log(point);
-
   target.classList.add("active");
 }
 
 function startOrStopGame() {
-  if (gameBtn.innerHTML == "ИГРАТЬ") {
-    //Начать игру
+  if (gameBtn.innerHTML === "ИГРАТЬ") {
+    // Начать игру
     gameBtn.innerHTML = "ЗАВЕРШИТЬ ИГРУ";
     gameBtn.style.backgroundColor = "red";
     startGame();
   } else {
-    //Завершить игру
+    // Завершить игру
     gameBtn.innerHTML = "ИГРАТЬ";
     gameBtn.style.backgroundColor = "#66a663";
     stopGame();
@@ -48,11 +49,11 @@ async function startGame() {
   });
 
   if (response.error) {
-    //Есть ошибка
+    // Есть ошибка
     gameBtn.innerHTML = "ИГРАТЬ";
     alert(response.message);
   } else {
-    //перезаписываем id
+    // Перезаписываем id
     game_id = response.game_id;
     activeArea();
     updateUserBalance();
@@ -65,7 +66,7 @@ async function stopGame() {
     game_id,
   });
   if (response.error) {
-    //Есть ошибка
+    // Есть ошибка
     gameBtn.innerHTML = "ЗАВЕРШИТЬ ИГРУ";
     alert(response.message);
   } else {
@@ -79,9 +80,67 @@ function activeArea() {
 
   for (let i = 0; i < field.length; i++) {
     field[i].addEventListener("contextmenu", setFlag);
-    setTimeout(() => {
-      field[i].classList.add("active");
-    }, 20 * i);
+    field[i].classList.add("active");
+    let row = Math.trunc(i / 10);
+    let column = i % 10;
+    field[i].setAttribute("data-row", row);
+    field[i].setAttribute("data-column", column);
+    field[i].addEventListener("click", makeStep);
+  }
+}
+
+async function makeStep(event) {
+  let target = event.target;
+  let row = +target.getAttribute("data-row");
+  let column = +target.getAttribute("data-column");
+
+  try {
+    let response = await sendRequest("game_step", "POST", {
+      game_id,
+      row,
+      column,
+    });
+    console.log(response);
+    updateArea(response.table);
+    if (response.error) {
+      alert(response.message);
+    } else {
+      if (response.status == "Ok") {
+      } else if (response.status == "Failed") {
+        alert("Вы проиграли :(");
+        gameBtn.innerHTML = "ИГРАТЬ";
+        gameBtn.style.backgroundColor = "#66a663";
+        setTimeout(() => resetField(), 2000);
+      } else if (response.status == "Won") {
+        alert("Вы выиграли!");
+        updateUserBalance();
+      }
+    }
+  } catch (error) {
+    console.error(`Неправильные данные ${error}`);
+  }
+}
+
+function updateArea(table) {
+  let fields = document.querySelectorAll(".field");
+  let a = 0;
+  for (let i = 0; i < table.length; i++) {
+    let row = table[i];
+    for (let j = 0; j < row.length; j++) {
+      let cell = row[j];
+      let value = fields[a];
+      if (cell === "") {
+      } else if (cell === 0) {
+        value.classList.remove("active");
+      } else if (cell == "BOMB") {
+        value.classList.remove("active");
+        value.classList.add("bomb");
+      } else if (cell > 0) {
+        value.classList.remove("active");
+        value.innerHTML = cell;
+      }
+      a++;
+    }
   }
 }
 
@@ -93,7 +152,9 @@ function setFlag(event) {
 
 function resetField() {
   const gameField = document.querySelector(".gameField");
-  gameField.innerHTML = "";
+  while (gameField.firstChild) {
+    gameField.removeChild(gameField.firstChild);
+  }
   for (let i = 0; i < 80; i++) {
     let cell = document.createElement("div");
     cell.classList.add("field");
@@ -104,27 +165,32 @@ function resetField() {
 resetField();
 
 async function auth() {
-  const loginWrapper = document.getElementById("loginWrapper");
-  const login = document.getElementById("login").value;
-  let response = await sendRequest("user", "GET", {
-    username: login,
-  });
-  if (response.error) {
-    //Пользователь не зарегистрировался
-    let registration = await sendRequest("user", "POST", {
+  try {
+    const loginWrapper = document.getElementById("loginWrapper");
+    const login = document.getElementById("login").value;
+    let response = await sendRequest("user", "GET", {
       username: login,
     });
-    if (registration.error) {
-      alert(registration.message);
+    if (response.error) {
+      // Пользователь не зарегистрировался
+      let registration = await sendRequest("user", "POST", {
+        username: login,
+      });
+      if (registration.error) {
+        alert(registration.message);
+      } else {
+        USERNAME = login;
+        loginWrapper.style.display = "none";
+        await updateUserBalance();
+      }
     } else {
-      USERNAME = login;
+      USERNAME = login; // Обновляем юзернейм
       loginWrapper.style.display = "none";
-      updateUserBalance();
+      await updateUserBalance(); // Обновляем данные
     }
-  } else {
-    USERNAME = login; // Обновляем юзернейм
-    loginWrapper.style.display = "none";
-    updateUserBalance(); // Обновляем данные
+  } catch (error) {
+    console.error("Ошибка авторизации:", error);
+    alert("Ошибка авторизации. Попробуйте ещё раз.");
   }
 }
 
@@ -134,39 +200,48 @@ async function updateUserBalance() {
   });
 
   if (response.error) {
-    //если есть ошибка
+    // Если есть ошибка
     alert(response.message);
   } else {
     const user = document.querySelector("header span");
-    user.innerHTML = `Пользователь ${response.username} баланс ${response.balance}`;
+    if (user) {
+      user.innerHTML = `Пользователь ${response.username} баланс ${response.balance}`;
+    }
   }
 }
 
 async function sendRequest(url, method, data) {
   url = `https://tg-api.tehnikum.school/tehnikum_course/minesweeper/${url}`;
 
-  if (method == "POST") {
-    let response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+  try {
+    let response;
+    if (method === "POST") {
+      response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    } else if (method === "GET") {
+      url = url + "?" + new URLSearchParams(data);
+      response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+    }
 
-    response = await response.json();
-    return response;
-  } else if (method == "GET") {
-    url = url + "?" + new URLSearchParams(data);
-    let response = await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    response = await response.json();
-    return response;
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Ошибка при выполнении запроса:", error);
+    return { error: true, message: error.message };
   }
 }
